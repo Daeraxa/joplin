@@ -343,7 +343,7 @@ The currently supported template variables are:
 
 # Plugins
 
-The **desktop app** has the ability to extend beyond it standard functionality by the way of plugins. These plugins adhere to the Joplin plugin API and can be installed & configured within the application via the Tools > Options > Plugins menu. This menu allows the manual installation of the plugin using the single 'Joplin Plugin Archive' (*.jpl) file. Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
+The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin plugin API and can be installed & configured within the application via the Tools > Options > Plugins menu. This menu allows the manual installation of the plugin using the single 'Joplin Plugin Archive' (*.jpl) file. Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
 
 Plugins are currently maintained by the community in the [Joplin Discourse 'plugins' category](https://discourse.joplinapp.org/c/plugins/18). These should not be considered 'official' and care should be taken to understand any potential risks that come from installing plugins.
 
