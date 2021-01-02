@@ -92,7 +92,6 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 	- [Joplin API Overview](https://github.com/laurent22/joplin/blob/dev/readme/api/overview.md)
 	- [Plugin development](https://github.com/laurent22/joplin/blob/dev/readme/api/get_started/plugins.md)
 	- [Plugin tutorial](https://github.com/laurent22/joplin/blob/dev/readme/api/tutorials/toc_plugin.md)
-	
 
 - Joplin API - References
 
@@ -129,22 +128,30 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - Desktop, mobile and terminal applications.
 - [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md) for Firefox and Chrome.
-- End To End Encryption (E2EE)
-- Note history (revisions)
+- End To End Encryption (E2EE).
+- Note history (revisions).
 - Synchronisation with various services, including Nextcloud, Dropbox, WebDAV and OneDrive.
+- Offline first, so the entire data is always available on the device even without an internet connection.
 - Import Enex files (Evernote export format) and Markdown files.
 - Export JEX files (Joplin Export format) and raw files.
 - Support notes, to-dos, tags and notebooks.
-- Goto Anything feature.
 - Sort notes by multiple criteria - title, updated time, etc.
 - Support for alarms (notifications) in mobile and desktop applications.
-- Offline first, so the entire data is always available on the device even without an internet connection.
 - Markdown notes, which are rendered with images and formatting in the desktop and mobile applications. Support for extra features such as math notation and checkboxes.
+- Choice of both Markdown and Rich Text editors.
 - File attachment support - images are displayed, and other files are linked and can be opened in the relevant application.
+- Inline display of PDF, video and audio files.
+- Goto Anything feature.
 - Search functionality.
 - Geo-location support.
-- Supports multiple languages
+- Supports multiple languages.
 - External editor support - open notes in your favorite external editor with one click in Joplin.
+- Extensible functionality through plugin and data APIs.
+- Template support with data variables for auto creation of time & dates.
+- Custom CSS support for customisation of both the rendered markdown and overall user interface.
+- Customisable layout allows toggling, movement and sizing of various elements.
+- Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
+
 
 # Importing
 
@@ -154,7 +161,7 @@ Joplin was designed as a replacement for Evernote and so can import complete Eve
 
 - Recognition data - Evernote images, in particular scanned (or photographed) documents have [recognition data](https://en.wikipedia.org/wiki/Optical_character_recognition) associated with them. It is the text that Evernote has been able to recognise in the document. This data is not preserved when the note are imported into Joplin. However, should it become supported in the search tool or other parts of Joplin, it should be possible to regenerate this recognition data since the actual image would still be available.
 
-- Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting.
+- Colour, font sizes and faces - Evernote text is stored as HTML and this is converted to Markdown during the import process. For notes that are mostly plain text or with basic formatting (bold, italic, bullet points, links, etc.) this is a lossless conversion, and the note, once rendered back to HTML should be very similar. Tables are also imported and converted to Markdown tables. For very complex notes, some formatting data might be lost - in particular colours, font sizes and font faces will not be imported. The text itself however is always imported in full regardless of formatting. If it is essential that this extra data is preserved then Joplin also allows import of ENEX files as HTML. While this does preserve additional formatting such as font colours and sizes, it will not be converted to Markdown; as such it can still be edited using the Rich Text editor but the Markdown editor will only display the unformatted HTML.
 
 To import Evernote data, first export your Evernote notebooks to ENEX files as described [here](https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks). Then follow these steps:
 
@@ -164,9 +171,12 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 ## Importing from Markdown files
 
-Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files.
+Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files. Joplin will accept \*.md, \*.markdown and \*.txt files for import.
 
-In the **desktop application**, open File > Import > MD and select your Markdown file or directory.
+In the **desktop application**:
+* **File import**: Go to File > Import > MD - Markdown (file) and select the Markdown file. This file will then be imported to the currently selected Notebook.
+* **Directory import**: Go to File > Import > MD - Markdown (directory) and select the top level of the directory that is being imported. Directory (folder) structure will be preserved in the Notebook > Subnotebook > Note structure within Joplin.
+
 
 In the **terminal application**, in [command-line mode](https://github.com/laurent22/joplin/blob/dev/readme/terminal.md#command-line-mode), type `import --format md /path/to/file.md` or `import --format md /path/to/directory/`.
 
@@ -182,12 +192,13 @@ In general the way to import notes from any application into Joplin is to conver
 # Exporting
 
 Joplin can export to the JEX format (Joplin Export file), which is a tar file that can contain multiple notes, notebooks, etc. This is a lossless format in that all the notes, but also metadata such as geo-location, updated time, tags, etc. are preserved. This format is convenient for backup purposes and can be re-imported into Joplin. A "raw" format is also available. This is the same as the JEX format except that the data is saved to a directory and each item represented by a single file.
+Joplin is also capable of exporting to a number of other formats including HTML and PDF which can be done for single notes, notebooks or all.
 
 # Synchronisation
 
 One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
-Currently, synchronisation is possible with Nextcloud, Dropbox, OneDrive or the local filesystem. To enable synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually.
+Currently, synchronisation is possible with Nextcloud, WebDAV, Dropbox, OneDrive or the local filesystem. To enable synchronisation please follow the instructions below. After that, the application can be configured to sync at a desired interval , or you can click on "Synchronise" to start a synchronisation manually. The application will background sync automatically after any content change is made on the local application.
 
 ## Nextcloud synchronisation
 
@@ -260,7 +271,7 @@ Joplin notes can be opened and edited using an external editor of your choice. I
 
 # Attachments
 
-Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the attachment. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links. Clicking on this link will open the file in the default application.
+Any kind of file can be attached to a note. In Markdown, links to these files are represented as a simple ID to the attachment. In the note viewer, these files, if they are images, will be displayed or, if they are other files (PDF, text files, etc.) they will be displayed as links (unless supported and configured for inline display). Clicking on this link will open the file in the default application.
 
 In the **desktop application**, files can be attached either by clicking the "Attach file" icon in the editor or via drag and drop. If you prefer to create a link to a local file instead, hold the ALT key while performing the drag and drop operation. You can also copy and paste images directly in the editor via Ctrl+V.
 
@@ -310,7 +321,7 @@ Important: userstyle.css and userchrome.css are provided for your convenience, b
 
 # Note templates
 
-In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
+In the **desktop app**, templates can be used to create new notes or to insert into existing ones by creating a `templates` folder in Joplin's config folder (i.e. `~/.config/joplin-desktop/templates)` and placing Markdown template files into it. For example creating the file `hours.md` in the `templates` directory with the contents:
 
 ```markdown
 Date: {{date}}
@@ -330,6 +341,12 @@ The currently supported template variables are:
 | `{{#custom_datetime}}` | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | `{{#custom_datetime}}M d{{/custom_datetime}}` |
 | `{{bowm}}` | Date of the beginning of the week (when week starts on Monday) based on the settings format | |
 | `{{bows}}` | Date of the beginning of the week (when week starts on Sunday) based on the settings format | |
+
+# Plugins
+
+The **desktop app** has the ability to extend beyond it standard functionality by the way of plugins. These plugins adhere to the Joplin plugin API and can be installed & configured within the application via the Tools > Options > Plugins menu. This menu allows the manual installation of the plugin using the single 'Joplin Plugin Archive' (*.jpl) file. Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
+
+Plugins are currently maintained by the community in the [Joplin Discourse 'plugins' category](https://discourse.joplinapp.org/c/plugins/18). These should not be considered 'official' and care should be taken to understand any potential risks that come from installing plugins.
 
 # Searching
 
