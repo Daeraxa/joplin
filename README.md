@@ -171,7 +171,7 @@ In the **terminal application**, in [command-line mode](https://github.com/laure
 
 ## Importing from Markdown files
 
-Joplin can import notes from plain Markdown file. You can either import a complete directory of Markdown files or individual files. Joplin will accept \*.md, \*.markdown and \*.txt files for import.
+Joplin can import notes from plain Markdown files. You can either import a complete directory of Markdown files or individual files. Joplin will accept \*.md, \*.markdown and \*.txt files for import.
 
 In the **desktop application**:
 * **File import**: Go to File > Import > MD - Markdown (file) and select the Markdown file. This file will then be imported to the currently selected Notebook.
