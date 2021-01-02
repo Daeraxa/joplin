@@ -152,7 +152,6 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Customisable layout allows toggling, movement and sizing of various elements.
 - Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
 
-
 # Importing
 
 ## Importing from Evernote
