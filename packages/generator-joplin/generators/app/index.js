@@ -3,19 +3,27 @@
 const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
+const slugify = require('slugify');
 
 function mergePackageKey(parentKey, source, dest) {
 	const output = Object.assign({}, dest);
 
 	for (const k in source) {
-		if (!(k in output)) {
+		if (k === 'keywords' && !Array.isArray(output[k])) {
+			// Fix an earlier bugs where keywords were set to an empty object
+			output[k] = source[k];
+		} else if (k === 'keywords') {
+			// For keywords, make sure to add the "joplin-plugin" one
+			if (!output['keywords']) output['keywords'] = [];
+			if (output['keywords'].indexOf('joplin-plugin') < 0) output['keywords'].push('joplin-plugin');
+		} else if (!(k in output)) {
 			// If the key doesn't exist in the destination, add it
 			output[k] = source[k];
 		} else if (parentKey === 'devDependencies') {
 			// If we are dealing with the dependencies, overwrite with the
 			// version from source.
 			output[k] = source[k];
-		} else if (typeof source[k] === 'object' && !Array.isArray(k) && source[k] !== null) {
+		} else if (typeof source[k] === 'object' && !Array.isArray(source[k]) && source[k] !== null) {
 			// If it's an object, recursively process it
 			output[k] = mergePackageKey(k, source[k], output[k]);
 		} else {
@@ -25,6 +33,18 @@ function mergePackageKey(parentKey, source, dest) {
 	}
 
 	return output;
+}
+
+function packageNameFromPluginName(pluginName) {
+	return `joplin-plugin-${slugify(pluginName, {
+		lower: true,
+	})}`;
+}
+
+function addDerivedProps(props) {
+	return Object.assign({}, props, {
+		packageName: packageNameFromPluginName(props.pluginName),
+	});
 }
 
 module.exports = class extends Generator {
@@ -88,6 +108,11 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'input',
+				name: 'pluginRepositoryUrl',
+				message: 'Repository URL:',
+			},
+			{
+				type: 'input',
 				name: 'pluginHomepageUrl',
 				message: 'Homepage URL:',
 			},
@@ -98,10 +123,10 @@ module.exports = class extends Generator {
 			for (const prompt of prompts) {
 				props[prompt.name] = '';
 			}
-			this.props = props;
+			this.props = addDerivedProps(props);
 		} else {
 			return this.prompt(prompts).then(props => {
-				this.props = props;
+				this.props = addDerivedProps(props);
 			});
 		}
 	}
@@ -114,6 +139,8 @@ module.exports = class extends Generator {
 
 		const files = [
 			'.gitignore_TEMPLATE',
+			'.npmignore_TEMPLATE',
+			'GENERATOR_DOC.md',
 			'package_TEMPLATE.json',
 			'README.md',
 			'tsconfig.json',
