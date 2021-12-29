@@ -128,7 +128,7 @@ export default class NoteListUtils {
 							const note = await Note.load(noteIds[i]);
 							links.push(Note.markdownTag(note));
 						}
-						clipboard.writeText(links.join(' '));
+						clipboard.writeText(links.join('\n'));
 					},
 				})
 			);
