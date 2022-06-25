@@ -10,7 +10,7 @@ const BaseModel = require('@joplin/lib/BaseModel').default;
 
 class Command extends BaseCommand {
 	usage() {
-		return 'edit <note>';
+		return 'edit <note> [myeditor]';
 	}
 
 	description() {
@@ -24,7 +24,10 @@ class Command extends BaseCommand {
 			if (tempFilePath) fs.removeSync(tempFilePath);
 		};
 
+		const myEditor = args['myeditor'];
+
 		const textEditorPath = () => {
+			if (myEditor) return myEditor;
 			if (Setting.value('editor')) return Setting.value('editor');
 			if (process.env.EDITOR) return process.env.EDITOR;
 			throw new Error(_('No text editor is defined. Please set it using `config editor <editor-path>`'));
